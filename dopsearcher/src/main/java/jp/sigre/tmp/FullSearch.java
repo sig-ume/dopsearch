@@ -1,6 +1,9 @@
 package jp.sigre.tmp;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +19,20 @@ public class FullSearch extends Digest{
 		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+		/*
+         * 現在の標準出力先を保持する
+         */
+        PrintStream sysOut = System.out;
+
+        /*
+         * 標準出力の出力先をファイルに切り変える
+         */
+        FileOutputStream fos = new FileOutputStream("target\\out.txt");
+        PrintStream ps = new PrintStream(fos);
+
+        System.setOut(ps); // 実際に切り替えているのはここ
+
 		long start = System.currentTimeMillis();
 
 		System.out.println("@Start");
@@ -26,10 +42,6 @@ public class FullSearch extends Digest{
 		}
 		System.out.println("@FullSearch End");
 
-//		System.out.println("-----------------------");
-//		fullSearch.printDirList();
-//		System.out.println("-----------------------");
-//		fullSearch.printFileList();
 
 		System.out.println("@CompareFile");
 		fullSearch.compareFile();
@@ -41,6 +53,16 @@ public class FullSearch extends Digest{
 		long end = System.currentTimeMillis();
 
 		System.out.println((end - start) / 1000  + "s");
+
+		// ファイルをクローズ
+        ps.close();
+        fos.close();
+
+        /*
+         * 標準出力をデフォルトに戻す
+         */
+        System.setOut(sysOut);
+
 	}
 
 	public void readFolder(File dir) {
@@ -54,12 +76,12 @@ public class FullSearch extends Digest{
 			if (!file.exists()) {
 				continue;
 			} else if (file.isDirectory()) {
-				System.out.println("fold:" + file.getPath());
+				//System.out.println("fold:" + file.getPath());
 
 				executeFolder(dir);
 				readFolder(file);
 			} else if (file.isFile()) {
-				System.out.println("file:" + file.getPath());
+				//System.out.println("file:" + file.getPath());
 
 				executeFile(file);
 			}
@@ -67,9 +89,7 @@ public class FullSearch extends Digest{
 	}
 
 	private void executeFile(File file) {
-		//System.out.print("file\t:");
-		digSample.getDigest(file.getPath());
-		System.out.println("exeFile:" + file.length());
+		//System.out.println("exeFile:" + file.length());
 
 		fileList.add(getBean(file));
 
@@ -90,11 +110,6 @@ public class FullSearch extends Digest{
 		result.setSize(file.length());
 		String md5 = "";
 		if (file.isFile()) {
-			byte[] digest = digSample.getDigest(file.getAbsolutePath());
-			for (int loop = 0;loop < digest.length;loop++) {
-	            md5 += Integer.toHexString(0xff&(char)digest[loop]).toString();
-	        }
-
 			result.setType(true);
 		} else if(file.isDirectory()) {
 			result.setType(false);

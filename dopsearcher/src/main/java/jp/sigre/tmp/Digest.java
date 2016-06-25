@@ -1,10 +1,10 @@
 package jp.sigre.tmp;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.util.Arrays;
 
 public class Digest {
 
@@ -32,6 +32,7 @@ public class Digest {
 
 	public byte[] getDigest(String path) {
 		MessageDigest msgDig = null;
+		byte[] digest = new byte[4];
 		DigestInputStream digInput = null;
 		try {
 			msgDig = MessageDigest.getInstance(DIG_ALGORITHM);
@@ -40,19 +41,22 @@ public class Digest {
 
 			while(digInput.read() != -1) {	}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			Arrays.fill(digest,(byte)0);
+			return digest;
 		} finally {
 			try {
 				digInput.close();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
+			} catch (Exception e) {
+				//e.printStackTrace();
+				Arrays.fill(digest,(byte)0);
+				return digest;
 			}
 		}
 
 
 
-		byte[] digest = msgDig.digest();
+		digest  = msgDig.digest();
 
 		String fileNames[] = path.split("\\\\");
 		String fileName = fileNames[fileNames.length - 1];

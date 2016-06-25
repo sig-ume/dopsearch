@@ -9,6 +9,8 @@ public class FolderCompare {
 		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
+	//TODO ファイルが比較されてる
+
 	public void printNearlyFolders(List<FileBean> list) {
 
 		List<FileBean> result = new ArrayList<FileBean>();
