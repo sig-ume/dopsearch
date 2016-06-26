@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FullSearch extends Digest{
@@ -16,7 +18,6 @@ public class FullSearch extends Digest{
 
 
 	public FullSearch() {
-		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -25,10 +26,13 @@ public class FullSearch extends Digest{
          */
         PrintStream sysOut = System.out;
 
+
+		FullSearch fullSearch = new FullSearch();
+
         /*
          * 標準出力の出力先をファイルに切り変える
          */
-        FileOutputStream fos = new FileOutputStream("target\\out.txt");
+        FileOutputStream fos = new FileOutputStream("target\\out"+fullSearch.getDateStr()+".txt");
         PrintStream ps = new PrintStream(fos);
 
         System.setOut(ps); // 実際に切り替えているのはここ
@@ -36,7 +40,6 @@ public class FullSearch extends Digest{
 		long start = System.currentTimeMillis();
 
 		System.out.println("@Start");
-		FullSearch fullSearch = new FullSearch();
 		for (int i = 0; i < args.length; i++) {
 			fullSearch.readFolder(new File(args[i]));
 		}
@@ -90,7 +93,7 @@ public class FullSearch extends Digest{
 
 	private void executeFile(File file) {
 		//System.out.println("exeFile:" + file.length());
-
+		//TODO; 特定の条件のファイルを追加しない
 		fileList.add(getBean(file));
 
 	}
@@ -143,5 +146,11 @@ public class FullSearch extends Digest{
 		fileList.addAll(dirList);
 		new FolderCompare().printNearlyFolders(fileList);
 
+	}
+
+	private String getDateStr() {
+		Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss");
+        return sdf1.format(date);
 	}
 }

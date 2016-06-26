@@ -30,6 +30,16 @@ public class Digest {
 
 	}
 
+	public String getDigestStr(String path) {
+		byte[] digest = getDigest(path);
+		String md5 = "";
+		for (int loop = 0;loop < digest.length;loop++) {
+			md5 += Integer.toHexString(0xff&(char)digest[loop]).toString();
+		}
+
+		return md5;
+	}
+
 	public byte[] getDigest(String path) {
 		MessageDigest msgDig = null;
 		byte[] digest = new byte[4];
