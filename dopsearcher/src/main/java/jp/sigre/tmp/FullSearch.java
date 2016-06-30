@@ -94,7 +94,8 @@ public class FullSearch extends Digest{
 	private void executeFile(File file) {
 		//System.out.println("exeFile:" + file.length());
 		//TODO; 特定の条件のファイルを追加しない
-		fileList.add(getBean(file));
+
+		if (!file.getName().endsWith(".svn-base")) fileList.add(getBean(file));
 
 	}
 
